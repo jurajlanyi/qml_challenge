@@ -50,17 +50,27 @@ Window {
         TextField {
             id: idUserOneInput
             width: parent.width-10
-            placeholderText: qsTr("TextField to enter text")
+            placeholderText: qsTr("Enter your name")
             font.pointSize: 12
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 5
             anchors.left: parent.left
             anchors.leftMargin: 5
+            property bool isInit: false                 // was chat user name entered ?
             onAccepted : {
-                chatserver.message = text;      // relay message to chatserver object
-                idUserOneInput.text = ""        // empty input field
-//                idUserOneChatDisplay.text = chatserver.message // direct modification with chatserver property 'read value'
-//                idUserOneChatDisplay.text += ("\nmessage typed: " + text); // direct modification
+                if (text.length > 0) {
+                    if (!isInit) { // Register with entered name
+                        chatserver.registerChatClient(text)
+                        isInit = true; text = "";
+                        placeholderText = "Enter your message here"
+                    }
+                    else {
+                        chatserver.message = text;      // relay message to chatserver object
+                        idUserOneInput.text = ""        // empty input field
+//                        idUserOneChatDisplay.text = chatserver.message // direct modification with chatserver property 'read value'
+//                        idUserOneChatDisplay.text += ("\nmessage typed: " + text); // direct modification
+                    }
+                }
             }
         }
 

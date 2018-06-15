@@ -12,6 +12,7 @@ Window {
 
     ChatServer {
         id: chatserver
+//        message: "no message"
     }
 
     Text {
@@ -23,13 +24,10 @@ Window {
 
     Rectangle {
         id: idUserOneArea
-        color: "lightYellow"
-        border.width: 2
-        border.color: "red"
+        color: "lightYellow" ; border.width: 2 ; border.color: "red"
         width: parent.width-10
         height: parent.height*0.4
-        anchors.top: idWindowHeaderArea.bottom
-        anchors.topMargin: 5
+        anchors.top: idWindowHeaderArea.bottom ; anchors.topMargin: 5
         anchors.horizontalCenter: parent.horizontalCenter
         Text {
             id: idUserOneChatHeader
@@ -52,11 +50,8 @@ Window {
             width: parent.width-10
             placeholderText: qsTr("Enter your name")
             font.pointSize: 12
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 5
-            anchors.left: parent.left
-            anchors.leftMargin: 5
-            property bool isInit: false                 // was chat user name entered ?
+            anchors { bottom: parent.bottom ; left: parent.left ; bottomMargin: 5 ; leftMargin: 5 }
+            property bool isInit: true                 // was chat user name entered ?
             onAccepted : {
                 if (text.length > 0) {
                     if (!isInit) { // Register with entered name
@@ -73,27 +68,48 @@ Window {
                 }
             }
         }
-
-        Connections {
-            target: chatserver
-            onMessageChanged: {                 // reaction to ChatServer signal
-                idUserOneChatDisplay.text = chatserver.message
-            }
-        }
     }
 
     Rectangle {
         id: idUserTwoArea
-        color: "lightGreen"
-        border.width: 2
-        border.color: "red"
+        color: "lightGreen" ; border.width: 2 ; border.color: "red"
         width: parent.width-10
         height: parent.height*0.4
-        anchors.top: idUserOneArea.bottom
-        anchors.topMargin: 5
+        anchors.top: idUserOneArea.bottom ; anchors.topMargin: 5
         anchors.horizontalCenter: parent.horizontalCenter
+//        chatserver.registerChatClient("robot")
+//                Component.onCompleted: chatserver.registerChatClient("robot")
         Text {
+            id : idUserTwoChatHeader
             text : "container rectangle user2 chat elements"
+        }
+        // Area where chat messages are listed
+        TextEdit {
+            id: idUserTwoChatDisplay
+            textFormat: Text.RichText
+            text: qsTr("Chat user 2")
+            anchors.top: idUserTwoChatHeader.bottom
+            readOnly: true
+            font.family: "Helvetica"; font.pointSize: 8
+            color: "black"
+        }
+        TextField {
+            id: idUserTwoInput
+            width: parent.width-10
+            placeholderText: qsTr("Enter your name")
+            font.pointSize: 12
+            onAccepted : {
+                if (text.length > 0)
+                    chatserver.registerChatClient("robot")
+            }
+        }
+    }
+
+    Connections {
+        target: chatserver
+        onMessageChanged: {                 // reaction to ChatServer signal
+            idUserOneChatDisplay.text = chatserver.message
+            idUserTwoChatDisplay.text = chatserver.message
         }
     }
 }

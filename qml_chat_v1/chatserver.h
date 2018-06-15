@@ -12,10 +12,16 @@ class ChatServer : public QObject
 
 public:
     explicit ChatServer(QObject *parent = nullptr);
-    Q_INVOKABLE bool registerChatClient(const QString &clientName);
+//    Q_INVOKABLE bool registerChatClient(const QString &clientName);
 
     QString message() { return m_messageString; };
     void setMessage(const QString &message); // { m_messageString = message + "<br>" + m_messageString; emit messageChanged(); };
+
+private:
+    int clients;                // number of registered clients
+    QString m_messageString;    // all chat messages
+public:
+    QString m_userName;         // chat user name
 
 signals:
     void chatUpdate();          // TODO: chat content was updated
@@ -23,9 +29,6 @@ signals:
 
 public slots:
 
-private:
-    QString m_messageString;    // all chat messages
-    QString m_userName;         // chat user name
 };
 
 #endif // CHATSERVER_H

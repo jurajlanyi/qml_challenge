@@ -14,6 +14,9 @@ void ChatServer::setMessage(const QString &message)
     if (message.length() == 0)
         return;
 
+    if (clients > 0)
+        m_messageString += userName;
+
     m_messageString += (message + "<br>");
     emit messageChanged();
 };
@@ -26,10 +29,15 @@ void ChatServer::setMessage(const QString &message)
 //    return true;
 //}
 
-void ChatServer::registerChatClient(int n)
+//void ChatServer::registerChatClient(int n, QString clname)
+bool ChatServer::registerChatClient(int n, const QString & clname)
 {
-    m_messageString = "chat session register client <br>";
+//    m_messageString = "chat session register client <br>";
     clients += n;
+//    userName = "some client";
+    userName = clname;
 //    m_userName = clientName;
-//    emit messageChanged();
+
+    emit messageChanged();
+    return true;
 }

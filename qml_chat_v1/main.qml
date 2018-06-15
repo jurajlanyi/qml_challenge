@@ -29,6 +29,7 @@ Window {
         height: parent.height*0.4
         anchors.top: idWindowHeaderArea.bottom ; anchors.topMargin: 5
         anchors.horizontalCenter: parent.horizontalCenter
+        property string my_name: ""
         Text {
             id: idUserOneChatHeader
             text : "container rectangle user1 chat elements"
@@ -51,19 +52,20 @@ Window {
             placeholderText: qsTr("Enter your name")
             font.pointSize: 12
             anchors { bottom: parent.bottom ; left: parent.left ; bottomMargin: 5 ; leftMargin: 5 }
-            property bool isInit: false                 // was chat user name entered ?
+            property bool isInit: false                     // was chat user name entered ?
             onAccepted : {
                 if (text.length > 0) {
                     if (!isInit) { // Register with entered name
                         chatserver.registerChatClient(text)
-                        isInit = true; text = "";
+                        isInit = true
+                        parent.my_name = text; text = "";
                         placeholderText = "Enter your message here"
                     }
                     else {
-                        chatserver.message = text;      // relay message to chatserver object
-                        idUserOneInput.text = ""        // empty input field
-//                        idUserOneChatDisplay.text = chatserver.message // direct modification with chatserver property 'read value'
-//                        idUserOneChatDisplay.text += ("\nmessage typed: " + text); // direct modification
+                        chatserver.sendChatMessage(parent.my_name, text);
+                        console.log("ONE: sending message, my name is: ", parent.my_name);
+//                        chatserver.message = text         // relay message to chatserver object
+                        idUserOneInput.text = ""            // empty input field
                     }
                 }
             }
@@ -77,8 +79,8 @@ Window {
         height: parent.height*0.4
         anchors.top: idUserOneArea.bottom ; anchors.topMargin: 5
         anchors.horizontalCenter: parent.horizontalCenter
-//        chatserver.registerChatClient("robot")
-//                Component.onCompleted: chatserver.registerChatClient("robot")
+//Component.onCompleted: chatserver.registerChatClient("robot") // automatic registration
+        property string my_name: ""
         Text {
             id : idUserTwoChatHeader
             text : "container rectangle user2 chat elements"
@@ -98,9 +100,21 @@ Window {
             width: parent.width-10
             placeholderText: qsTr("Enter your name")
             font.pointSize: 12
+            property bool isInit: false                     // was chat user name entered ?
             onAccepted : {
-                if (text.length > 0)
-                    chatserver.registerChatClient("robot")
+                if (text.length > 0) {
+                    if (!isInit) { // Register with entered name
+                        chatserver.registerChatClient(text)
+                        isInit = true
+                        parent.my_name = text; text = "";
+                        placeholderText = "Enter your message here"
+                    }
+                    else {
+                        chatserver.sendChatMessage(parent.my_name, text);
+                        console.log("TWO: sending message, my name is: ", parent.my_name);
+                        idUserOneInput.text = ""        // empty input field
+                    }
+                }
             }
         }
     }
@@ -108,6 +122,7 @@ Window {
     Connections {
         target: chatserver
         onMessageChanged: {                 // reaction to ChatServer signal
+            // todo parse arguments, if any
             idUserOneChatDisplay.text = chatserver.message
             idUserTwoChatDisplay.text = chatserver.message
         }

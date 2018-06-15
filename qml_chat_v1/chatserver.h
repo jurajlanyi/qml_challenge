@@ -50,8 +50,6 @@ private:
     ClientMap chatClients;          // Registered clients are stored here
 
 public:
-    QString m_userName;             // chat user name
-    QString m_userName2;            // chat user name
 
 signals:
     void chatUpdate(QString msgTo, QString msgFrom, QString msgText);          // TODO: chat content was updated

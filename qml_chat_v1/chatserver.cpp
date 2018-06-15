@@ -5,8 +5,6 @@
 ChatServer::ChatServer(QObject *parent) : QObject(parent)
 {
     m_allMessages = "no chat session<br>";
-    m_userName = "";
-    m_userName += "not definied"; // fails ?
     clients = 0;
     sessionActive = 0;
 }
@@ -56,14 +54,17 @@ bool ChatServer::registerChatClient(const QString &clientName)
 
     ChatClient cc;
     chatClients.insert(std::make_pair(clientName,cc));
-    clients++;
 
-    if (clients == 1)
-        m_userName = clientName;
-    if (clients == 2)
-        m_userName2 = clientName;
+    //clients++;
+    clients = chatClients.size();
+
+//    if (clients == 1)
+//        m_userName = clientName;
+//    if (clients == 2)
+//        m_userName2 = clientName;
+
     if (clients == 2) {
-        m_allMessages = "chat session was established now with " + m_userName + " <br>";
+        m_allMessages = "chat session was established now";
         setSessionActive(1);
         emit messageChanged();
     }

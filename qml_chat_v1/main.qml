@@ -1,6 +1,7 @@
 import QtQuick 2.8
 import QtQuick.Window 2.2
 import QtQuick.Controls 1.4
+//import QtQuick.Controls 2.1
 
 import io.qt.examples.chatserver 1.0
 
@@ -18,31 +19,59 @@ Window {
         id: idWindowHeaderArea
         text: "window text - idWindowHeaderArea"
         color: "red"
-        height: parent.height*0.1
+//        height: parent.height*0.1
     }
 
     Rectangle {
         id: idUserOneArea
+//        clip: true
         color: "lightYellow" ; border.width: 2 ; border.color: "red"
         width: parent.width-10
-        height: parent.height*0.4
+        height: parent.height*0.35
         anchors.top: idWindowHeaderArea.bottom ; anchors.topMargin: 5
         anchors.horizontalCenter: parent.horizontalCenter
         property string my_name: ""
+
         Text {
             id: idUserOneChatHeader
             text : "container rectangle user1 chat elements"
+            anchors.top : parent.top
+
         }
+//        // Area where chat messages are listed
+//        TextEdit {
+//            id: idUserOneChatDisplay
+//            textFormat: Text.RichText
+//            text: qsTr("Chat user 1")
+//            anchors.top: idUserOneChatHeader.bottom
+////            anchors.bottom: idUserOneInput.top
+//            anchors.margins: 2
+//            height : parent.height*0.5
+//wrapMode: Text.WrapAtWordBoundaryOrAnywhere;
+//            readOnly: true
+//            font.family: "Helvetica"; font.pointSize: 8
+//            color: "blue"
+//        }
+
+ScrollView {
+            anchors.top: idUserOneChatHeader.bottom
+            anchors.bottom: idUserOneInput.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.margins: 2
+//            height : parent.height*0.5
+
         // Area where chat messages are listed
         TextEdit {
             id: idUserOneChatDisplay
             textFormat: Text.RichText
-            text: qsTr("Chat user 1")
-            anchors.top: idUserOneChatHeader.bottom
+//            text: qsTr("Chat user 1")
+//wrapMode: Text.WrapAtWordBoundaryOrAnywhere;
             readOnly: true
             font.family: "Helvetica"; font.pointSize: 8
             color: "blue"
         }
+}
 
         // Element to enter message
         TextField {
@@ -70,20 +99,26 @@ Window {
                 }
             }
         }
+
     }
 
     //Component.onCompleted: chatserver.registerChatClient("robot") // idea to register automatically
     Rectangle {
         id: idUserTwoArea
+//        clip: true
+
         color: "lightGreen" ; border.width: 2 ; border.color: "red"
-        width: parent.width-10
-        height: parent.height*0.4
-        anchors.top: idUserOneArea.bottom ; anchors.topMargin: 5
+//        width: parent.width-10
+        width: parent.width*0.8
+        height: parent.height*0.35
+        anchors.top: idUserOneArea.bottom ; anchors.topMargin: 50
+//        anchors.bottom: parent.bottom ; anchors.bottomMargin: 5
         anchors.horizontalCenter: parent.horizontalCenter
         property string my_name: ""
         Text {
             id : idUserTwoChatHeader
             text : "container rectangle user2 chat elements"
+            anchors.top: parent.top
         }
         // Area where chat messages are listed
         TextEdit {
@@ -91,7 +126,11 @@ Window {
             textFormat: Text.RichText
             text: qsTr("Chat user 2")
             anchors.top: idUserTwoChatHeader.bottom
+            anchors.bottom: idUserTwoInput.top
+            anchors.margins: 2
+//            height : parent.height*0.5
             readOnly: true
+            clip: true
             font.family: "Helvetica"; font.pointSize: 8
             color: "black"
         }
@@ -101,6 +140,7 @@ Window {
             placeholderText: qsTr("Enter your name")
             font.pointSize: 12
             property bool isInit: false                     // was chat user name entered ?
+            anchors { bottom: parent.bottom ; left: parent.left ; bottomMargin: 5 ; leftMargin: 5 }
             onAccepted : {
                 if (text.length > 0) {
                     if (!isInit) { // Register with entered name

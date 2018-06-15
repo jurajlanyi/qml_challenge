@@ -12,7 +12,7 @@ class ChatServer : public QObject
 
 public:
     explicit ChatServer(QObject *parent = nullptr);
-//    Q_INVOKABLE bool registerChatClient(const QString &clientName);
+    Q_INVOKABLE bool registerChatClient(const QString &clientName);
 
     QString message() { return m_messageString; };
     void setMessage(const QString &message); // { m_messageString = message + "<br>" + m_messageString; emit messageChanged(); };

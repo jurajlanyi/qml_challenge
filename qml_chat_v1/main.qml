@@ -51,7 +51,7 @@ Window {
             placeholderText: qsTr("Enter your name")
             font.pointSize: 12
             anchors { bottom: parent.bottom ; left: parent.left ; bottomMargin: 5 ; leftMargin: 5 }
-            property bool isInit: true                 // was chat user name entered ?
+            property bool isInit: false                 // was chat user name entered ?
             onAccepted : {
                 if (text.length > 0) {
                     if (!isInit) { // Register with entered name

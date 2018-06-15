@@ -1,3 +1,5 @@
+#include <time.h>
+
 #include "chatserver.h"
 
 ChatServer::ChatServer(QObject *parent) : QObject(parent)
@@ -30,15 +32,32 @@ void ChatServer::sendChatMessage(const QString &clientName, const QString &messa
     m_allMessages += "<br>";
 //    emit messageChanged();
 
-    if (clientName == m_userName)
-        emit chatUpdate(m_userName2, m_userName, messageText);
-    if (clientName == m_userName2)
-        emit chatUpdate(m_userName, m_userName2, messageText);
+
+    for (auto it: chatClients) {
+        if (it.first != clientName) {
+            emit chatUpdate(it.first, clientName, messageText);
+        }
+        else {
+            it.second.messages++;
+            it.second.lastMessage = time(NULL);
+        }
+    }
+//    if (clientName == m_userName)
+//        emit chatUpdate(m_userName2, m_userName, messageText);
+//    if (clientName == m_userName2)
+//        emit chatUpdate(m_userName, m_userName2, messageText);
 }
 
-void ChatServer::registerChatClient(const QString &clientName)
+bool ChatServer::registerChatClient(const QString &clientName)
 {
+    ClientMap::iterator it = chatClients.find(clientName);
+    if (it != chatClients.end()) // already registered
+        return false;
+
+    ChatClient cc;
+    chatClients.insert(std::make_pair(clientName,cc));
     clients++;
+
     if (clients == 1)
         m_userName = clientName;
     if (clients == 2)
@@ -48,5 +67,6 @@ void ChatServer::registerChatClient(const QString &clientName)
         setSessionActive(1);
         emit messageChanged();
     }
+    return true;
 }
 

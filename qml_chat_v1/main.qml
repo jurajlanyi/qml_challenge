@@ -55,10 +55,11 @@ Window {
             onAccepted : {
                 if (text.length > 0) {
                     if (!isInit) { // Register with entered name
-                        chatserver.registerChatClient(text)
-                        isInit = true
-                        parent.my_name = text;
-                        placeholderText = "Enter your message here"
+                        if (chatserver.registerChatClient(text)) {
+                            isInit = true
+                            parent.my_name = text;
+                            placeholderText = "Enter your message here"
+                        }
                     }
                     else if (chatserver.sessionActive) {
                         console.log("ONE: sending message, my name is: ", parent.my_name);
@@ -103,10 +104,11 @@ Window {
             onAccepted : {
                 if (text.length > 0) {
                     if (!isInit) { // Register with entered name
-                        chatserver.registerChatClient(text)
-                        isInit = true
-                        parent.my_name = text;
-                        placeholderText = "Enter your message here"
+                        if (chatserver.registerChatClient(text)) {
+                            isInit = true
+                            parent.my_name = text;
+                            placeholderText = "Enter your message here"
+                        }
                     }
                     else if (chatserver.sessionActive) {
                         console.log("TWO: sending message, my name is: ", parent.my_name);

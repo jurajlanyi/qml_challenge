@@ -57,15 +57,15 @@ Window {
                     if (!isInit) { // Register with entered name
                         chatserver.registerChatClient(text)
                         isInit = true
-                        parent.my_name = text; text = "";
+                        parent.my_name = text;
                         placeholderText = "Enter your message here"
                     }
-                    else {
+                    else if (chatserver.sessionActive) {
                         console.log("ONE: sending message, my name is: ", parent.my_name);
                         chatserver.sendChatMessage(parent.my_name, text);
                         idUserOneChatDisplay.text += ("me>" + text)
-                        idUserOneInput.text = ""            // empty input field
                     }
+                    text = ""
                 }
             }
         }
@@ -108,7 +108,7 @@ Window {
                         parent.my_name = text;
                         placeholderText = "Enter your message here"
                     }
-                    else {
+                    else if (chatserver.sessionActive) {
                         console.log("TWO: sending message, my name is: ", parent.my_name);
                         chatserver.sendChatMessage(parent.my_name, text);
                         idUserTwoChatDisplay.text += ("me>" + text)

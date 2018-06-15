@@ -6,8 +6,10 @@ ChatServer::ChatServer(QObject *parent) : QObject(parent)
     m_userName = "";
     m_userName += "not definied"; // fails ?
     clients = 0;
+    sessionActive = 0;
 }
 
+/*
 void ChatServer::setMessage(const QString &message)
 {
 // newest message on top - it does not look good
@@ -19,6 +21,7 @@ void ChatServer::setMessage(const QString &message)
     m_allMessages += (m_userName + "> " + message + "<br>");
     emit messageChanged();
 };
+*/
 
 void ChatServer::sendChatMessage(const QString &clientName, const QString &messageText)
 {
@@ -42,6 +45,8 @@ void ChatServer::registerChatClient(const QString &clientName)
         m_userName2 = clientName;
     if (clients == 2) {
         m_allMessages = "chat session was established now with " + m_userName + " <br>";
+        setSessionActive(1);
         emit messageChanged();
     }
 }
+

@@ -25,9 +25,10 @@ private:
     QString m_allMessages;   // all chat messages
 public:
     QString m_userName;         // chat user name
+    QString m_userName2;         // chat user name
 
 signals:
-    void chatUpdate();          // TODO: chat content was updated
+    void chatUpdate(QString msgTo, QString msgFrom, QString msgText);          // TODO: chat content was updated
     void messageChanged();      // chat content changed
 
 public slots:

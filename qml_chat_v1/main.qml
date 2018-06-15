@@ -12,7 +12,6 @@ Window {
 
     ChatServer {
         id: chatserver
-//        message: "no message"
     }
 
     Text {
@@ -62,9 +61,9 @@ Window {
                         placeholderText = "Enter your message here"
                     }
                     else {
-                        chatserver.sendChatMessage(parent.my_name, text);
                         console.log("ONE: sending message, my name is: ", parent.my_name);
-//                        chatserver.message = text         // relay message to chatserver object
+                        chatserver.sendChatMessage(parent.my_name, text);
+                        idUserOneChatDisplay.text += ("me>" + text)
                         idUserOneInput.text = ""            // empty input field
                     }
                 }
@@ -72,6 +71,7 @@ Window {
         }
     }
 
+    //Component.onCompleted: chatserver.registerChatClient("robot") // idea to register automatically
     Rectangle {
         id: idUserTwoArea
         color: "lightGreen" ; border.width: 2 ; border.color: "red"
@@ -79,7 +79,6 @@ Window {
         height: parent.height*0.4
         anchors.top: idUserOneArea.bottom ; anchors.topMargin: 5
         anchors.horizontalCenter: parent.horizontalCenter
-//Component.onCompleted: chatserver.registerChatClient("robot") // automatic registration
         property string my_name: ""
         Text {
             id : idUserTwoChatHeader
@@ -106,14 +105,15 @@ Window {
                     if (!isInit) { // Register with entered name
                         chatserver.registerChatClient(text)
                         isInit = true
-                        parent.my_name = text; text = "";
+                        parent.my_name = text;
                         placeholderText = "Enter your message here"
                     }
                     else {
-                        chatserver.sendChatMessage(parent.my_name, text);
                         console.log("TWO: sending message, my name is: ", parent.my_name);
-                        idUserOneInput.text = ""        // empty input field
+                        chatserver.sendChatMessage(parent.my_name, text);
+                        idUserTwoChatDisplay.text += ("me>" + text)
                     }
+                    text = ""                               // empty input field
                 }
             }
         }
@@ -121,10 +121,18 @@ Window {
 
     Connections {
         target: chatserver
-        onMessageChanged: {                 // reaction to ChatServer signal
+        onMessageChanged: {                                 // reaction to ChatServer signal
             // todo parse arguments, if any
             idUserOneChatDisplay.text = chatserver.message
             idUserTwoChatDisplay.text = chatserver.message
+        }
+        onChatUpdate: {                                     // ChatServer signal delivers new message
+            // todo parse arguments, if any
+            console.log("onChatUpdate msg to " + msgTo + " from " + msgFrom)
+            if (msgTo == idUserOneArea.my_name)
+                idUserOneChatDisplay.text += (msgFrom + ">" + msgText)
+            if (msgTo == idUserTwoArea.my_name)
+                idUserTwoChatDisplay.text += (msgFrom + ">" + msgText)
         }
     }
 }

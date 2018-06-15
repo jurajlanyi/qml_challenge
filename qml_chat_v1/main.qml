@@ -59,6 +59,8 @@ Window {
             onAccepted : {
                 chatserver.message = text;      // relay message to chatserver object
                 idUserOneInput.text = ""        // empty input field
+//                chatserver.registerChatClient(text)
+                chatserver.registerChatClient(2) // just a test
 //                idUserOneChatDisplay.text = chatserver.message // direct modification with chatserver property 'read value'
 //                idUserOneChatDisplay.text += ("\nmessage typed: " + text); // direct modification
             }

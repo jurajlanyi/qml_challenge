@@ -15,6 +15,9 @@ public:
     QString message() { return m_messageString; };
     void setMessage(const QString &message); // { m_messageString = message + "<br>" + m_messageString; emit messageChanged(); };
 
+//    Q_INVOKABLE bool registerChatClient(const QString &clientName);
+    Q_INVOKABLE void registerChatClient(int n);
+
 signals:
     void chatUpdate(); // TODO: chat content was updated
     void messageChanged(); // chat content changed
@@ -23,6 +26,7 @@ public slots:
 
 private:
     QString m_messageString;
+    int clients;
 };
 
 #endif // CHATSERVER_H

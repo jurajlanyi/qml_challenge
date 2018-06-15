@@ -3,6 +3,7 @@
 ChatServer::ChatServer(QObject *parent) : QObject(parent)
 {
     m_messageString = "chat session was established now<br>";
+    clients = 0;
 }
 
 void ChatServer::setMessage(const QString &message)
@@ -16,3 +17,19 @@ void ChatServer::setMessage(const QString &message)
     m_messageString += (message + "<br>");
     emit messageChanged();
 };
+
+//bool ChatServer::registerChatClient(const QString &clientName)
+//{
+//    m_messageString = "chat session was established now with " + clientName + " <br>";
+//    m_userName = clientName;
+//    emit messageChanged();
+//    return true;
+//}
+
+void ChatServer::registerChatClient(int n)
+{
+    m_messageString = "chat session register client <br>";
+    clients += n;
+//    m_userName = clientName;
+//    emit messageChanged();
+}

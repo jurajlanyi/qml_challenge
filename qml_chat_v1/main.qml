@@ -21,6 +21,15 @@ Window {
         color: "red"
 //        height: parent.height*0.1
     }
+    Text {
+        id: idUsernameOne
+        text: "User One Name"
+        font.pointSize: 12
+        color: "black"
+//        height: parent.height*0.1
+        anchors.top: idWindowHeaderArea.bottom ; anchors.topMargin: 1
+        anchors.left: idUserOneArea.left
+    }
 
     Rectangle {
         id: idUserOneArea
@@ -28,7 +37,8 @@ Window {
         color: "lightYellow" ; border.width: 2 ; border.color: "red"
         width: parent.width-10
         height: parent.height*0.35
-        anchors.top: idWindowHeaderArea.bottom ; anchors.topMargin: 5
+//        anchors.top: idWindowHeaderArea.bottom ; anchors.topMargin: 5
+        anchors.top: idUsernameOne.bottom ; anchors.topMargin: 2
         anchors.horizontalCenter: parent.horizontalCenter
         property string my_name: ""
 
@@ -86,7 +96,7 @@ ScrollView {
                     if (!isInit) { // Register with entered name
                         if (chatserver.registerChatClient(text)) {
                             isInit = true
-                            parent.my_name = text;
+                            parent.my_name = text; idUsernameOne.text = text;
                             placeholderText = "Enter your message here"
                         }
                     }
@@ -103,6 +113,17 @@ ScrollView {
     }
 
     //Component.onCompleted: chatserver.registerChatClient("robot") // idea to register automatically
+
+    Text {
+        id: idUsernameTwo
+        text: "User Two Name"
+        font.pointSize: 12
+        color: "black"
+//        height: parent.height*0.1
+        anchors.top: idUserOneArea.bottom ; anchors.topMargin: 8
+        anchors.left: idUserTwoArea.left
+    }
+
     Rectangle {
         id: idUserTwoArea
 //        clip: true
@@ -111,7 +132,8 @@ ScrollView {
 //        width: parent.width-10
         width: parent.width*0.8
         height: parent.height*0.35
-        anchors.top: idUserOneArea.bottom ; anchors.topMargin: 50
+        anchors.top: idUsernameTwo.bottom ; anchors.topMargin: 2
+//        anchors.top: idUserOneArea.bottom ; anchors.topMargin: 50
 //        anchors.bottom: parent.bottom ; anchors.bottomMargin: 5
         anchors.horizontalCenter: parent.horizontalCenter
         property string my_name: ""
@@ -146,7 +168,7 @@ ScrollView {
                     if (!isInit) { // Register with entered name
                         if (chatserver.registerChatClient(text)) {
                             isInit = true
-                            parent.my_name = text;
+                            parent.my_name = text; idUsernameTwo.text = text;
                             placeholderText = "Enter your message here"
                         }
                     }

@@ -9,10 +9,10 @@
 class ChatClient                            // derive from QObject ?
 {
 public:
-    ChatClient() : messages(0), lastMessage(0) {};
+    ChatClient() : messages(0), lastActive(0) {};
 private:
-    int messages;                           // messages sent
-    time_t lastMessage;                     // automatic kick-off after timeout ???
+    int messages;                                           // messages sent
+    time_t lastActive;                                      // last activity. automatic kick-off after timeout ???
 friend class ChatServer;
 };
 
@@ -21,8 +21,8 @@ class ChatServer : public QObject
 {
     Q_OBJECT
 
-    // OBSOLETE: message property accumulates whole chat history
-//    Q_PROPERTY(QString message READ message WRITE setMessage NOTIFY messageChanged)
+// Now OBSOLETE: message property accumulates whole chat history, each write adds message
+// Q_PROPERTY(QString message READ message WRITE setMessage NOTIFY messageChanged)
 // TODO: rename, if needed at all
     Q_PROPERTY(QString message READ message WRITE setMessageNone NOTIFY messageChanged)
 
@@ -39,21 +39,21 @@ public:
     void setMessageNone(const QString &message) { }; // Does nothing by purpose
 
     int getSessionActive() { return sessionActive; };
-    void setSessionActive(int act) { sessionActive = act; emit sessionActiveChanged(); }; // TODO - check whether changing
+    void setSessionActive(int act);
 
 private:
-    int clients;                // number of registered clients
-    QString m_allMessages;      // all chat messages
-    int sessionActive;          // are at least 2 members active ?
+    QString m_allMessages;                                  // all chat messages
+    int sessionActive;                                      // are at least 2 members active ?
+    QString m_status;                                       // Text status for the chat
 
     typedef std::map<QString, ChatClient> ClientMap;
-    ClientMap chatClients;          // Registered clients are stored here
+    ClientMap chatClients;                                  // Registered clients are stored here
 
 public:
 
 signals:
-    void chatUpdate(QString msgTo, QString msgFrom, QString msgText);          // TODO: chat content was updated
-    void messageChanged();      // chat content changed
+    void chatUpdate(QString msgTo, QString msgFrom, QString msgText, QString strStatus);        // TODO: chat content was updated
+    void messageChanged();                                  // chat content changed
     void sessionActiveChanged();
 
 public slots:

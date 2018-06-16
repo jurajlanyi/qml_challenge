@@ -76,7 +76,7 @@ Window {
                         }
                     }
                     else if (chatserver.sessionActive) {
-                        console.log("ONE: sending message, my name is: ", parent.my_name);
+                        console.log("CHAT ONE: sending message, my name is: ", parent.my_name);
                         chatserver.sendChatMessage(parent.my_name, text);
                         idUserOneChatDisplay.text += ("me> " + text)
                     }
@@ -93,7 +93,6 @@ Window {
         text: "User Two Name"
         font.pointSize: 12
         color: "black"
-//        height: parent.height*0.1
         anchors.top: idUserOneArea.bottom ; anchors.topMargin: 8
         anchors.left: idUserTwoArea.left
     }
@@ -145,7 +144,7 @@ Window {
                         }
                     }
                     else if (chatserver.sessionActive) {
-                        console.log("TWO: sending message, my name is: ", parent.my_name);
+                        console.log("CHAT TWO: sending message, my name is: ", parent.my_name);
                         chatserver.sendChatMessage(parent.my_name, text);
                         idUserTwoChatDisplay.text += ("me> " + text)
                     }
@@ -168,8 +167,8 @@ Window {
             idUserTwoChatDisplay.text = chatserver.message
         }
         onChatUpdate: {                                     // ChatServer signal delivers new message
-//            if (layoutFancyOffset)
-//                layoutFancyOffset = 0;                    // Change Layout as chat is established - TODO use some property
+            if (layoutFancyOffset)
+                layoutFancyOffset = 0;                      // Change Layout as chat is established - TODO use some property
 
             // parse Signal arguments
             console.log("onChatUpdate msg to " + msgTo + " from " + msgFrom)
@@ -177,6 +176,7 @@ Window {
                 idUserOneChatDisplay.text += (msgFrom + "> " + msgText)
             if (msgTo == idUserTwoArea.my_name)
                 idUserTwoChatDisplay.text += (msgFrom + "> " + msgText)
+            idWindowFooterArea.text = strStatus
         }
     }
 }

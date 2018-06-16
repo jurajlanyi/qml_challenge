@@ -11,77 +11,52 @@ Window {
     height: 480
     title: qsTr("QML Chat")
 
+    property int layoutFancyOffset: 0.15*width              // Properties used for vertical layout
+    property int layoutSingleUserAreaHeight: (height-idWindowFooterArea.height)/2-10
     ChatServer {
         id: chatserver
     }
 
     Text {
-        id: idWindowHeaderArea
-        text: "window text - idWindowHeaderArea"
-        color: "red"
-//        height: parent.height*0.1
-    }
-    Text {
         id: idUsernameOne
         text: "User One Name"
-        font.pointSize: 12
-        color: "black"
-//        height: parent.height*0.1
-        anchors.top: idWindowHeaderArea.bottom ; anchors.topMargin: 1
-        anchors.left: idUserOneArea.left
+        font.pointSize: 12 ; color: "black"
+        anchors.top: parent.top ; anchors.margins: 1
+        anchors.left: idUserOneArea.left // allign with rectangle
     }
 
     Rectangle {
         id: idUserOneArea
-//        clip: true
         color: "lightYellow" ; border.width: 2 ; border.color: "red"
-        width: parent.width-10
-        height: parent.height*0.35
-//        anchors.top: idWindowHeaderArea.bottom ; anchors.topMargin: 5
-        anchors.top: idUsernameOne.bottom ; anchors.topMargin: 2
-        anchors.horizontalCenter: parent.horizontalCenter
-        property string my_name: ""
+        width: parent.width-layoutFancyOffset
+        height: layoutSingleUserAreaHeight-idUsernameOne.height
+        anchors.top: idUsernameOne.bottom ; anchors.topMargin: 2 ;
+        anchors.left: parent.left
+
+        property string my_name: ""                         // User entered name as indentification for chat
 
         Text {
             id: idUserOneChatHeader
             text : "container rectangle user1 chat elements"
             anchors.top : parent.top
-
         }
-//        // Area where chat messages are listed
-//        TextEdit {
-//            id: idUserOneChatDisplay
-//            textFormat: Text.RichText
-//            text: qsTr("Chat user 1")
-//            anchors.top: idUserOneChatHeader.bottom
-////            anchors.bottom: idUserOneInput.top
-//            anchors.margins: 2
-//            height : parent.height*0.5
-//wrapMode: Text.WrapAtWordBoundaryOrAnywhere;
-//            readOnly: true
-//            font.family: "Helvetica"; font.pointSize: 8
-//            color: "blue"
-//        }
 
-ScrollView {
+        ScrollView {
             anchors.top: idUserOneChatHeader.bottom
-            anchors.bottom: idUserOneInput.top
-            anchors.left: parent.left
-            anchors.right: parent.right
+            anchors.bottom: idUserOneInput.top; anchors.left: parent.left ; anchors.right: parent.right
             anchors.margins: 2
-//            height : parent.height*0.5
 
-        // Area where chat messages are listed
-        TextEdit {
-            id: idUserOneChatDisplay
-            textFormat: Text.RichText
-//            text: qsTr("Chat user 1")
+            // Area where chat messages are listed
+            TextEdit {
+                id: idUserOneChatDisplay
+                textFormat: Text.RichText
+                text: qsTr("Chat messages user 1")
 //wrapMode: Text.WrapAtWordBoundaryOrAnywhere;
-            readOnly: true
-            font.family: "Helvetica"; font.pointSize: 8
-            color: "blue"
+                readOnly: true
+                font.family: "Helvetica"; font.pointSize: 8
+                color: "blue"
+            }
         }
-}
 
         // Element to enter message
         TextField {
@@ -103,13 +78,12 @@ ScrollView {
                     else if (chatserver.sessionActive) {
                         console.log("ONE: sending message, my name is: ", parent.my_name);
                         chatserver.sendChatMessage(parent.my_name, text);
-                        idUserOneChatDisplay.text += ("me>" + text)
+                        idUserOneChatDisplay.text += ("me> " + text)
                     }
                     text = ""
                 }
             }
         }
-
     }
 
     //Component.onCompleted: chatserver.registerChatClient("robot") // idea to register automatically
@@ -126,36 +100,34 @@ ScrollView {
 
     Rectangle {
         id: idUserTwoArea
-//        clip: true
-
         color: "lightGreen" ; border.width: 2 ; border.color: "red"
-//        width: parent.width-10
-        width: parent.width*0.8
-        height: parent.height*0.35
+        width: parent.width-layoutFancyOffset
+        height: layoutSingleUserAreaHeight-idUsernameOne.height
         anchors.top: idUsernameTwo.bottom ; anchors.topMargin: 2
-//        anchors.top: idUserOneArea.bottom ; anchors.topMargin: 50
-//        anchors.bottom: parent.bottom ; anchors.bottomMargin: 5
-        anchors.horizontalCenter: parent.horizontalCenter
-        property string my_name: ""
+        anchors.left: parent.left; anchors.leftMargin: layoutFancyOffset
+        property string my_name: ""                         // User entered name as indentification for chat
+
         Text {
             id : idUserTwoChatHeader
             text : "container rectangle user2 chat elements"
             anchors.top: parent.top
         }
-        // Area where chat messages are listed
-        TextEdit {
-            id: idUserTwoChatDisplay
-            textFormat: Text.RichText
-            text: qsTr("Chat user 2")
+        ScrollView {
             anchors.top: idUserTwoChatHeader.bottom
-            anchors.bottom: idUserTwoInput.top
+            anchors.bottom: idUserTwoInput.top; anchors.left: parent.left ; anchors.right: parent.right
             anchors.margins: 2
-//            height : parent.height*0.5
-            readOnly: true
-            clip: true
-            font.family: "Helvetica"; font.pointSize: 8
-            color: "black"
+
+            // Area where chat messages are listed
+            TextEdit {
+                id: idUserTwoChatDisplay
+                textFormat: Text.RichText
+                text: qsTr("Chat messages user 2")
+                readOnly: true
+                font.family: "Helvetica"; font.pointSize: 8
+                color: "black"
+            }
         }
+
         TextField {
             id: idUserTwoInput
             width: parent.width-10
@@ -175,12 +147,17 @@ ScrollView {
                     else if (chatserver.sessionActive) {
                         console.log("TWO: sending message, my name is: ", parent.my_name);
                         chatserver.sendChatMessage(parent.my_name, text);
-                        idUserTwoChatDisplay.text += ("me>" + text)
+                        idUserTwoChatDisplay.text += ("me> " + text)
                     }
                     text = ""                               // empty input field
                 }
             }
         }
+    }
+    Text {
+        id: idWindowFooterArea
+        text: "application status text - idWindowFooterArea" // TODO update from server
+        anchors.bottom: parent.bottom
     }
 
     Connections {
@@ -191,12 +168,15 @@ ScrollView {
             idUserTwoChatDisplay.text = chatserver.message
         }
         onChatUpdate: {                                     // ChatServer signal delivers new message
-            // todo parse arguments, if any
+//            if (layoutFancyOffset)
+//                layoutFancyOffset = 0;                    // Change Layout as chat is established - TODO use some property
+
+            // parse Signal arguments
             console.log("onChatUpdate msg to " + msgTo + " from " + msgFrom)
             if (msgTo == idUserOneArea.my_name)
-                idUserOneChatDisplay.text += (msgFrom + ">" + msgText)
+                idUserOneChatDisplay.text += (msgFrom + "> " + msgText)
             if (msgTo == idUserTwoArea.my_name)
-                idUserTwoChatDisplay.text += (msgFrom + ">" + msgText)
+                idUserTwoChatDisplay.text += (msgFrom + "> " + msgText)
         }
     }
 }
